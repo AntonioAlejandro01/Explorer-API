@@ -2,3 +2,5 @@ dist/
 node_modules/
 src/storage
 src/tmp/
+.env
+.editorconfig
