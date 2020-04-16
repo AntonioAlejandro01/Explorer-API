@@ -27,7 +27,7 @@
 	 -  Topic: the topic of route **Example: /routes/topic/food**
 	 - Location: it's for send two calls on the same time with location.
 		- Example point 3: **/routes/Mordor** 
-		- Example this point: ** /routes/location/Mordor-West**
+		- Example this point: **/routes/location/Mordor-West**
 5.  This endpoint give a qr image with a qr-key
 6.  This endpoint give a compress images in .zip with a "places-key" . The key is obtained in the places-key attribute when decoding the QR.
 
@@ -43,7 +43,7 @@
 
 #### Utilities
 
-> to write :tw-1f603: 
+> to write :)
 
 
 
