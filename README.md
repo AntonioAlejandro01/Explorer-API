@@ -43,6 +43,10 @@
 
 #### Utilities
 
+uuid
+jszip
+
+
 > to write :)
 
 
