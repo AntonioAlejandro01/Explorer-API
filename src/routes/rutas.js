@@ -13,7 +13,7 @@ import ExplorerDB from "./../explorerDB/querys";
 
 const router = express.Router();
 
-const TYPE_FILTERS = ["title", "date", "author", "topic", "location"];
+const TYPE_FILTERS = ["title", "author", "topic", "location"];
 const FILE_EXTENSIONS = ["zip", "png", "jpg", "jpeg"];
 
 router.get("/:location", (req, res, next) => {
@@ -78,24 +78,27 @@ router.post("/", (req, res, next) => {
     //console.log(files);
     if (!qr || !images) {
         return res
-            .status(500)
+            .status(400)
             .json({
-                message: "internal error",
+                message: "Bad Request",
             })
             .end();
     }
-    // colocar ficheros en carpeta TMP
+    //establecer nuevos nombres con los identificadores uuid
     qr.name = `${uuidv4()}${path.extname(qr.name)}`;
     images.name = `${uuidv4()}${path.extname(images.name)}`;
-
+    
+    // colocar ficheros en carpeta TMP para poder descomprimirlo
     images.mv(`src/tmp/${images.name}`, err => {
         if (err) return res.status(500).json({ 'message': 'Internal Error' }).end();
     });
+
     let pathImages;
     try {
-        pathImages = extractZipTo(`src/tmp/${images.name}`, `${__dirname.substring(0, __dirname.length - 6)}`, (images.name).split('.')[0]);
+        // se guarda la ruta donde se han descomprimido las imagenes si todo ha ido bien
+        pathImages = extractZipTo(`src/tmp/${images.name}`, `${__dirname.substring(0, __dirname.length - 6)}`, (images.name).split('.')[0])
     } catch (err) {
-        console.log('ERROR EN ZIP TYPE:', err);
+        console.log('ERROR EN ZIP TYPE:>', err);
         res.status(500).json({ "message": 'Internal error' });
     }
     //revisar ahora QR
@@ -195,13 +198,30 @@ router.get("/:filterType/:filterValue", (req, res, next) => {
 const extractZipTo = async (source, dirname, filename) => {
     try {
         let pathDirectory = path.join(dirname, `tmp/${filename}`);
+        // espero a que se descomprima el zip
         await extract(source, { dir: pathDirectory });
-        console.log('Hola 3', dirname);
+        // leo los fichero que contiene
         fs.readdir(pathDirectory, (err, files) => {
             if (err) throw err;
             console.log('Listado de Ficheros');
             console.log(files);
-            let directorios = files.map(item => fs.lstatSync(path.join(dirname, '/tmp/', filename, '/', item)).isDirectory() ? item : undefined).filter(item => item != undefined).length;
+
+
+            let haveDirectories = files.map(item => fs.lstatSync(path.join(dirname, '/tmp/', filename, '/', item)).isDirectory() ? undefined: item).includes(undefined);
+            
+            if (haveDirectories){ // el zip tiene directorios . FORMAT ERROR
+                throw 'ZIP FORMAT ERROR.';
+            }
+            // comprobar la extension de todos los ficheros
+            let haveIncorrectExtensions = files.map(item => path.extname(item) != FILE_EXTENSIONS[0] && FILE_EXTENSIONS.includes(path.extname(item))).includes(false);
+
+            if (haveIncorrectExtensions){
+                throw 'one or more files have incorrect extension';
+            }
+            // TODO: WORK
+            
+            console.log("ZIP format and images format are OK!!!");
+            
             if (directorios == 0) { //  no hay carpetas // valido
                 if (files.length == files.filter(item => path.extname(item) != 'zip' && FILE_EXTENSIONS.includes(path.extname(item)))) {
                     // todos los ficheros tienen la extension correcta
@@ -218,6 +238,7 @@ const extractZipTo = async (source, dirname, filename) => {
         });
     } catch (error) {
         console.log('EERROORR', error);
+        throw error.message;
 
     }
 
