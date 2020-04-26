@@ -16,66 +16,9 @@ const router = express.Router();
 const TYPE_FILTERS = ["title", "author", "topic", "location"];
 const FILE_EXTENSIONS = ["zip", "png", "jpg", "jpeg"];
 
-router.get("/:location", (req, res, next) => {
-    //me devuleve las mejores rutas(titulo de la foto qr que es su hash por lo que es unico) de su localizacion
-    let location = req.params.location;
-    if (!location) {
-        return res.status(400).json({
-            message: "error with arguments",
-        });
-    }
-
-    ExplorerDB.getRoutes({
-        location,
-        callback(err, result) {
-            if (err)
-                return res.status(500).json({
-                    message: "internal error",
-                });
-
-            let rutas = result.map(({ imageQR }) => imageQR);
-
-            if (rutas.length == 0) {
-                // no hay ninguna ruta
-                return res.status(204).json({
-                    message: "it wasn't found results",
-                });
-            }
-
-            res.status(200).json(rutas);
-            return res.end();
-        },
-    });
-});
-
-/*
-
-    Estructura JSON Ruta: 
-    {
-        title:'Nombre de la ruta',
-        author: 'Autor de la ruta (Puede ser nulo. En ese caso contendrá =>  '')',
-        location: 'Lugar donde el usuario ha escrito que es la ruta',
-        topic: Tema de que trata la ruta
-        places: 'Los lugares en formato JSON',
-
-    }
-
-    Estructura JSON Places
-    {
-        nombres:[Paco,juan,antonio],
-        latitudes:[],
-        longitudes[],
-        comments:[],
-        stars:[],
-    }
-
-
-*/
-
 router.post("/", (req, res, next) => {
     let qr = req.files.qr;
     let images = req.files.images;
-    //console.log(files);
     if (!qr || !images) {
         return res
             .status(400)
@@ -101,53 +44,8 @@ router.post("/", (req, res, next) => {
         console.log('ERROR EN ZIP TYPE:>', err);
         res.status(500).json({ "message": 'Internal error' });
     }
-    //revisar ahora QR
-
-    //  revisar el fichero zip
-
-    /*
-        let imagesPlaces;
-        let ruta;
-        qrParser(qr).then(respuesta => {
-            let jsonRuta = JSON.parse(respuesta.data);
-
-            let [title, author, location, topic, places] = {
-                jsonRuta
-            };
-            ruta = {
-                title,
-                author,
-                location,
-                topic,
-                places,
-                imageQR,
-                imagesPlaces,
-            };
-
-            ExplorerDB.insertRoute(ruta,
-                (err, result) => {
-                    if (err) res.status(500).json({
-                        "Message": "Internal Error"
-                    })
-                    console.log("Insertado con resultado: ", result);
-
-                    //valido
-                    // mover ficheros
-
-
-                    res.status(200).json({
-                        'message': 'Ruta Registrada'
-                    }).end();
-                }
-            );
-
-
-
-
-        })
-        
-        */
-
+   
+    //TODO: parsear el qr para guardarlo en la base de datos
 
     //Si los ficheros son validos
     // mover la carpeta de images en tmp a storage/images
@@ -161,6 +59,38 @@ router.post("/", (req, res, next) => {
     //comprobar ficheros
 
     return res.status(200).json({ 'message': 'Ok' }).end();
+});
+
+router.get("/:location", (req, res, next) => {
+    //me devuleve las mejores rutas(titulo de la foto qr que es su hash por lo que es unico) de su localizacion
+    let location = req.params.location;
+    if (!location) {
+        return res.status(400).json({
+            message: "error with arguments",
+        });
+    }
+
+    ExplorerDB.getRoutes({
+        location,
+        callback(err, result) {
+            if (err)
+                return res.status(500).json({
+                    message: "internal error",
+                });
+
+            let rutas = result.map(({ qrKey }) => qrKey);
+
+            if (rutas.length == 0) {
+                // no hay ninguna ruta
+                return res.status(204).json({
+                    message: "it wasn't found results",
+                });
+            }
+
+            res.status(200).json(rutas);
+            return res.end();
+        },
+    });
 });
 
 router.get("/:filterType/:filterValue", (req, res, next) => {
