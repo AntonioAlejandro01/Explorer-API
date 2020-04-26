@@ -1,5 +1,4 @@
 import express from "express";
-import sha256file from "sha256-file";
 import fs from "fs";
 import qrParser from "qrcode-parser";
 import { v4 as uuidv4 } from "uuid";

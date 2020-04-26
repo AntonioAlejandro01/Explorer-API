@@ -22,7 +22,6 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "qrcode-parser": "^1.2.0",
-    "sha256-file": "^1.0.0",
     "uuid": "^7.0.3"
   },
   "devDependencies": {
