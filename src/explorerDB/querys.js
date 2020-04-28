@@ -11,13 +11,25 @@ const ExplorerDB = {
     getRoutesBy({ filterType, filterValue, callback = (err, result) => { } }) {// llamada a la api en el endpoint GET /routes/:fiterType/:filterValue
         if (typeof callback != 'function') throw 'parameter type error';
 
-        explorerDB.query('SELECT qrKey, stars, placesKey FROM Explore.Route WHERE ? = ?', [filterType, filterValue], callback);
+        let query = 
+        (filterType == 'topic') 
+        ? 
+        'SELECT qrKey FROM Explorer.Route WHERE topic in (SELECT id from Explorer.Topic where topicName = ?)' 
+        : 
+        `SELECT qrKey FROM Explorer.Route WHERE ${filterType} = ?`;
+
+        explorerDB.query(query, [filterValue], callback);
 
     },
-    getRoutes(location, { callback = (err, result) => { } }) {// llamada a la api en el endpoint GET /route
+    getRoutes({ location, callback = (err, result) => { } }) {// llamada a la api en el endpoint GET /route
         if (typeof callback != 'function') throw 'parameter type error';
 
-        explorerDB.query('SELECT qrKey, stars, placesKey FROM Explorer.Route where location = ?', [location], callback);
+        explorerDB.query('SELECT qrKey FROM Explorer.Route where loca = ?', [location], callback);
+    },
+    getRouteOptionalData({ qrKey, callback = (err, result) => { } }) {
+        if (typeof callback != 'function') throw 'parameter type error';
+
+        explorerDB.query('SELECT stars, placesKey FROM Explorer.Route WHERE qrkey = ?', [qrKey], callback);
     },
     insertRoute({ title, author, topic, location, places, qrKey, placesKey }, callbackAfterInsert = (err, result) => { }, callbackAfterGetLastRoute = undefined) { // llamda a la API en el endpoint POST /route
         if (typeof callback != 'function') throw 'parameter type error';
