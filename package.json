@@ -18,10 +18,11 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
     "extract-zip": "^2.0.0",
+    "jimp": "^0.10.3",
+    "jsqr": "^1.2.0",
     "jszip": "^3.2.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "qrcode-parser": "^1.2.0",
     "uuid": "^7.0.3"
   },
   "devDependencies": {
