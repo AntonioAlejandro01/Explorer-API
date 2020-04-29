@@ -31,13 +31,21 @@ const ExplorerDB = {
         explorerDB.query('SELECT stars, placesKey FROM Explorer.Route WHERE qrkey = ?', [qrKey], callback);
     },
     insertRoute({ title, author, topic, location, places, qrKey, placesKey }, callbackAfterInsert = (err, result) => { }, callbackAfterGetLastRoute = undefined) { // llamda a la API en el endpoint POST /route
-        throwError(callbackAfterGetLastRoute)
+        throwError(callbackAfterInsert)
         explorerDB.query('CALL registerRoute(?,?,?,?,?,?,?)', [title, (!author) ? null : author, topic, location, places, qrKey, placesKey], (err, result) => {
             callbackAfterInsert(err, result);
             if (callbackAfterGetLastRoute) {
                 defaultCallbackToInsert(callbackAfterGetLastRoute);
             }
 
+        });
+    },
+    registerDownload(qrkeys = []){
+        if (!qrkeys) {
+            return;
+        }
+        qrkeys.forEach(key => {
+            explorerDB.query('CALL registerDowload((select id from Explorer.Route where qrKey = ?))',[key],(err,result) => {});
         });
     },
     close() {
