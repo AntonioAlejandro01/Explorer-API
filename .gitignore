@@ -4,3 +4,4 @@ src/storage
 src/tmp/
 .env
 .editorconfig
+server.log
