@@ -1,7 +1,9 @@
 # Explorer API
 
 ## Introduction
+Api to manage routes of places through QR with the location images in zip format.
 
+Runs on [Node.js](https://nodejs.org/es/) v12.16.2 without auth.
 
 
 ## Endpoints Map
@@ -20,102 +22,46 @@
 
 ## Descriptions
 
-1. The API give you a simple web page with her documentation
+1. The API give you a static web page with her documentation.
 
-2. This endpoint recive a json like a [example](https://github.com/AntonioAlejandro01/NodeServer/blob/master/exRuta.json) and return message with result and the key that was create.
+2. This endpoint receive a JSON like this [example](https://github.com/AntonioAlejandro01/NodeServer/blob/master/exRuta.json) and return message with result and the key that was create.
 
-3. The API give you a qr key with location parameter (Example: New York,Hyrule,Mordor ... )like this "60d5b1106b708cc134c521aae4e503bb1d2ec3c9bf8ad978f2c659820505d492". **Example of URL:<u> /routes/Hyrule/</u>**
+3. The API give you a _qrKey_ through location parameter (Example: New York,Hyrule,Mordor ... ).The _qrKey_ see like this "60d5b1106b708cc134c521aae4e503bb1d2ec3c9bf8ad978f2c659820505d492". **Example of URL:<ins> /routes/Hyrule/</ins>**
 
-4. It's like previous one but this can be use with these filters
-    - Title : Route Name. **Example:<u>/routes/title/The%20fat%20man's%20route</u>**
+4. It's like previous one but this can be use with these filters.
+
+    - Title : Route Name. **Example:<ins>/routes/title/The%20fat%20man's%20route</ins>**.
     
-	- Author: **Example: <u>/routes/author/Adam Richman</u>**
+	- Author: **Example: <ins>/routes/author/Adam Richman</ins>**.
 
-	- Topic: the topic of route **Example: <u>/routes/topic/food</u>**
+	- Topic: the topic of route **Example: <ins>/routes/topic/food</ins>**.
 
-	- Location: it's for send two calls on the same time with location.
+	- Location: It's for send two parallel calls with different locations.
 
-	    - Example point 3: **<u>/routes/Mordor</u>**
+	    - Example point 3: **<ins>/routes/Mordor</ins>**
 
-	    - Example this point: **<u>/routes/location/Mordor-West</u>**
+	    - Example this point: **<ins>/routes/location/Mordor-West</ins>**
 
-5. This endpoint give a qr image with a qr-key
+5. This endpoint give a QR image with a _qrkey_.
 
-6. This endpoint give a compress images in .zip with a "places-key" . The key is obtained in the endpoint <u>**7**</u>.
+6. This endpoint gives compress images in _.zip_ with a _placesKey_ . This key is obtained in the endpoint <ins>**7**</ins>.
 
-7. Return a [json](https://github.com/AntonioAlejandro01/NodeServer/blob/master/exMetadataRuta.json) with stars(downloads that route have it) and placesKey for use in endpoint <u>**6**</u>.
+7. Return a [JSON](https://github.com/AntonioAlejandro01/NodeServer/blob/master/exMetadataRuta.json) that contain stars(downloads that route have it) and _placesKey_ for use in endpoint <ins>**6**</ins>.
 
 ## Packages or Dependencies
 
-<table align="center" style="border:3px solid black;border-collapse:true;text-align:center;margin-top:0.5em">
-    <thead>
-		<tr style="padding-bottom: 1em;font-size:1.3em;">
-    		<th style="padding: 1em">Name</th>
-    		<th style="padding: 1em">Version</th>
-    		<th style="padding: 1em">Propouse</th>
-		</tr>
-	</thead>
-	<thbody>
-        <tr>
-		    <td>express</td>
-		    <td>4.17.1</td>
-		    <td>Create Web server</td>
-		</tr>
-        <tr>
-		    <td>express-fileupload</td>
-		    <td>1.1.6</td>
-		    <td>Handler files in request</td>
-		</tr>
-        <tr>
-		    <td>morgan</td>
-		    <td>1.10.0</td>
-		    <td>Create Logs</td>
-		</tr>
-        <tr>
-		    <td>mysql</td>
-		    <td>2.18.1</td>
-		    <td>Connect with database</td>
-		</tr>
-        <tr>
-		    <td>uuid</td>
-		    <td>7.0.3</td>
-		    <td>Create unique names from files that it will save</td>
-		</tr>
-        <tr>
-		    <td>body-parser</td>
-		    <td>1.19.0</td>
-		    <td>Handler easily POST request</td>
-		</tr>
-        <tr>
-		    <td>cors</td>
-		    <td>2.8.5</td>
-		    <td>C.O.R.S.</td>
-		</tr>
-        <tr>
-		    <td>dotenv</td>
-		    <td>8.2.0</td>
-		    <td>Posibility work with enviroment variables</td>
-		</tr>
-        <tr>
-		    <td>adm-zip</td>
-		    <td>0.4.14</td>
-		    <td>Analize .zip for validate structure</td>
-		</tr>
-        <tr>
-		    <td>qrcode</td>
-		    <td>1.4.4</td>
-		    <td>Create QR from json data recivedfor save it</td>
-		</tr>
-        <tr>
-		    <td>image-data-uri</td>
-		    <td>2.0.1</td>
-		    <td>Convert uri qr data to node buffer for write file</td>
-		</tr>
-	</thbody>
-</table>
+| **Name** | **Version** | **Description** | **Links** |
+| :------: | :---------: | :-------------: | :--------:|
+| express |  4.17.1 | Create Web server | [...](https://www.npmjs.com/package/express) |
+| express-fileupload |  1.1.6 | Handle files in request | [...](https://www.npmjs.com/package/express-fileupload) |
+| morgan |  1.10.0 | Create Logs | [...](https://www.npmjs.com/package/morgan) |
+| mysql |  2.18.1 | Connect with database | [...](https://www.npmjs.com/package/mysql) |
+| uuid |  7.0.3 | Create unique names from files to save it | [...](https://www.npmjs.com/package/uuid) |
+| body-parser |  1.19.0 | Handler easily POST request | [...](https://www.npmjs.com/package/body-parser) |
+| cors |  2.8.5 | C.O.R.S. | [...](https://www.npmjs.com/package/cors) |
+| dotenv |  8.2.0 | Possibility work with environment variables | [...](https://www.npmjs.com/package/dotenv) |
+| adm-zip |  0.4.14 | Analyze .zip to validate structure | [...](https://www.npmjs.com/package/adm-zip) |
+| qrcode | 1.4.4 | Create QR from JSON's data received for save it | [...](https://www.npmjs.com/package/qrcode) |
+| image-data-uri |  2.0.1 | Convert URI QR data to Nodejs's buffer to write file | [...](https://www.npmjs.com/package/image-data-uri) |
 
-
-> to write :)
-
-
-
+Spain,2020
