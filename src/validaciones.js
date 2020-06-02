@@ -1,18 +1,24 @@
 import AdmZip from 'adm-zip';
 
-const OBJECT_KEYS_JSON = ['title', 'author', 'location', 'topic', 'places', 'nombres', 'latitudes', 'longitudes', 'comments'];
+const OBJECT_KEYS_JSON = [
+  'title',
+  'author',
+  'location',
+  'topic',
+  'places',
+  'nombres',
+  'latitudes',
+  'longitudes',
+  'comments',
+];
 const FILE_EXTENSIONS = ['png', 'jpg', 'jpeg'];
 
 export default function validateFormatRoute(route) {
-  console.log(route.title);
-  
   let jRoute = route;
-  console.log("Parseado: ", jRoute);
 
   let first = Object.keys(jRoute)
     .map((item) => {
       OBJECT_KEYS_JSON.includes(item);
-      console.log(item);
     })
     .includes(false);
   if (first) {
@@ -50,7 +56,11 @@ export function validateZip(source) {
     return undefined;
   }
   // check if files have correct extension
-  if (zipEntries.map((item) => FILE_EXTENSIONS.includes(item.name.split('.')[1])).includes(false)) {
+  if (
+    zipEntries
+      .map((item) => FILE_EXTENSIONS.includes(item.name.split('.')[1]))
+      .includes(false)
+  ) {
     return undefined;
   }
 

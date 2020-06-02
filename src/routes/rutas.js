@@ -6,19 +6,16 @@ import imageDataUri from 'image-data-uri';
 //base de datos
 import ExplorerDB from './../explorerDB/querys';
 //
-import createQR,{deleteFile,writeLog} from '../utilities';
-import validateFormatRoute , { validateZip } from '../validaciones';
+import createQR, { deleteFile, writeLog } from '../utilities';
+import validateFormatRoute, { validateZip } from '../validaciones';
 
 const TYPE_FILTERS = ['title', 'author', 'topic', 'location'];
 
-
 const router = express.Router();
-
 
 router.post('/', (req, res) => {
   const routeData = req.body;
-  console.log(req.body);
-  
+
   //get new unique name's file to QR
   let nameQr = uuidv4();
 
@@ -38,12 +35,14 @@ router.post('/', (req, res) => {
       // have buffer from uri's qr
       let dataUri = imageDataUri.decode(uri);
       let rutaQR = path.join(__dirname, '../storage/qr', `${nameQr}.png`);
-      console.log(rutaQR);
-      
+
       fs.writeFile(rutaQR, dataUri.dataBuffer, (err) => {
         if (err) {
           writeLog(err);
-          return res.status(500).json({ message: 'internal error qr file generate' }).end();
+          return res
+            .status(500)
+            .json({ message: 'internal error qr file generate' })
+            .end();
         }
         //parser json and insert into database
         const route = routeData;
@@ -54,14 +53,14 @@ router.post('/', (req, res) => {
             topic: route.topic,
             location: route.location,
             places: JSON.stringify(route.places),
-            qrKey: nameQr
+            qrKey: nameQr,
           },
           (err, result) => {
             if (err) {
               writeLog(err);
               deleteFile(rutaQR);
               console.log(err);
-              
+
               return res.status(500).json({ message: 'internal error' });
             }
 
@@ -102,7 +101,7 @@ router.get('/:location', (req, res, next) => {
           message: "it wasn't found results",
         });
       }
-      ExplorerDB.registerDownload(result.map(({qrKey}) => qrKey));
+      ExplorerDB.registerDownload(result.map(({ qrKey }) => qrKey));
       return res.status(200).json(result).end();
     },
   });
@@ -133,7 +132,7 @@ router.get('/:filterType/:filterValue', (req, res, next) => {
           message: "it wasn't found results",
         });
       }
-      ExplorerDB.registerDownload(result.map(({qrKey}) => qrKey));
+      ExplorerDB.registerDownload(result.map(({ qrKey }) => qrKey));
       return res.status(200).json(result).end();
     },
   });
