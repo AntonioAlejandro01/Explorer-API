@@ -28,11 +28,11 @@ const ExplorerDB = {
     getRouteOptionalData({ qrKey, callback = (err, result) => { } }) {
        throwError(callback);
 
-        explorerDB.query('SELECT stars, placesKey FROM Explorer.Route WHERE qrkey = ?', [qrKey], callback);
+        explorerDB.query('SELECT stars, creationDate  FROM Explorer.Route INNER JOIN on Explorer.Route.id = Explorer.CreationsLog.idRoute WHERE Explorer.Route.qrkey = ?', [qrKey], callback);
     },
-    insertRoute({ title, author, topic, location, places, qrKey, placesKey }, callbackAfterInsert = (err, result) => { }, callbackAfterGetLastRoute = undefined) { // llamda a la API en el endpoint POST /route
+    insertRoute({ title, author, topic, location, places, qrKey }, callbackAfterInsert = (err, result) => { }, callbackAfterGetLastRoute = undefined) { // llamda a la API en el endpoint POST /route
         throwError(callbackAfterInsert)
-        explorerDB.query('CALL registerRoute(?,?,?,?,?,?,?)', [title, (!author) ? null : author, topic, location, places, qrKey, placesKey], (err, result) => {
+        explorerDB.query('CALL registerRoute(?,?,?,?,?,?)', [title, (!author) ? null : author, topic, location, places, qrKey], (err, result) => {
             callbackAfterInsert(err, result);
             if (callbackAfterGetLastRoute) {
                 defaultCallbackToInsert(callbackAfterGetLastRoute);
@@ -59,7 +59,7 @@ const ExplorerDB = {
 
 const defaultCallbackToInsert = (callback = (err, result) => { }) => {
    throwError(callback)
-    explorerDB.query('SELECT title,author,topic,loca,places,qrKey,placesKey FROM Explorer.Route order by id desc limit 1', [], callback);
+    explorerDB.query('SELECT title,author,topic,loca,places,qrKey FROM Explorer.Route order by id desc limit 1', [], callback);
 }
 
 const throwError = callback => {

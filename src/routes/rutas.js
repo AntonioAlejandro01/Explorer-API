@@ -16,35 +16,11 @@ const router = express.Router();
 
 
 router.post('/', (req, res) => {
-  if (!req.files) {
-    return res
-      .status(400)
-      .json({
-        message: 'Bad Request without files',
-      })
-      .end();
-  }
-  //save request data
-  const images = req.files.images;
-  const routeData = req.body.route;
-
-  if (!images) {
-    return res
-      .status(400)
-      .json({
-        message: 'Bad Request key incorrect',
-      })
-      .end();
-  }
-
-  //get new unique name's file
-  images.name = `${uuidv4()}${path.extname(images.name)}`;
+  const routeData = req.body;
+  console.log(req.body);
+  
+  //get new unique name's file to QR
   let nameQr = uuidv4();
-  //zip format validation(without directory and files extensions are correct)
-  if (!validateZip(images.data)) {
-    return res.status(400).json({ message: "error zip format or file's zip extensions" }).end();
-  }
-  //zip is Ok
 
   //validate json format
   let isOk = validateFormatRoute(routeData);
@@ -62,14 +38,15 @@ router.post('/', (req, res) => {
       // have buffer from uri's qr
       let dataUri = imageDataUri.decode(uri);
       let rutaQR = path.join(__dirname, '../storage/qr', `${nameQr}.png`);
-
+      console.log(rutaQR);
+      
       fs.writeFile(rutaQR, dataUri.dataBuffer, (err) => {
         if (err) {
           writeLog(err);
           return res.status(500).json({ message: 'internal error qr file generate' }).end();
         }
         //parser json and insert into database
-        const route = JSON.parse(routeData);
+        const route = routeData;
         ExplorerDB.insertRoute(
           {
             title: route.title,
@@ -77,25 +54,18 @@ router.post('/', (req, res) => {
             topic: route.topic,
             location: route.location,
             places: JSON.stringify(route.places),
-            qrKey: nameQr,
-            placesKey: images.name.split('.')[0],
+            qrKey: nameQr
           },
           (err, result) => {
             if (err) {
               writeLog(err);
               deleteFile(rutaQR);
+              console.log(err);
+              
               return res.status(500).json({ message: 'internal error' });
             }
 
             if ((result.response = 'true')) {
-              //put zip in final directory for future request for the server can serve
-              images.mv(`src/storage/images/${images.name}`, (err) => {
-                if (err) {
-                  writeLog(err);
-                  deleteFile(rutaQR);
-                  return res.status(500).json({ message: 'internal error with QR file' }).end();
-                }
-              });
               return res.status(200).json({ message: 'Ok', key: nameQr }).end();
             } else {
               deleteFile(rutaQR);

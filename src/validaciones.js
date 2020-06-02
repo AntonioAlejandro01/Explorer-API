@@ -4,7 +4,10 @@ const OBJECT_KEYS_JSON = ['title', 'author', 'location', 'topic', 'places', 'nom
 const FILE_EXTENSIONS = ['png', 'jpg', 'jpeg'];
 
 export default function validateFormatRoute(route) {
-  let jRoute = JSON.parse(route);
+  console.log(route.title);
+  
+  let jRoute = route;
+  console.log("Parseado: ", jRoute);
 
   let first = Object.keys(jRoute)
     .map((item) => {

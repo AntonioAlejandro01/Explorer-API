@@ -5,7 +5,7 @@ import { writeLog } from '../utilities';
 const router = Express.Router();
 
 /**
- * Devuleve al cliente todos los temas disponibles
+ * Devuelve al cliente todos los temas disponibles
  */
 router.get('/', (req, res, next) => {
   ExplorerDB.getTopics({
