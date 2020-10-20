@@ -1,19 +1,19 @@
-import express from 'express';
-import fs from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
-import imageDataUri from 'image-data-uri';
+import express from "express";
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import path from "path";
+import imageDataUri from "image-data-uri";
 //base de datos
-import ExplorerDB from './../explorerDB/querys';
+import ExplorerDB from "./../explorerDB/querys";
 //
-import createQR, { deleteFile, writeLog } from '../utilities';
-import validateFormatRoute, { validateZip } from '../validaciones';
+import createQR, { deleteFile, writeLog } from "../utilities";
+import validateFormatRoute, { validateZip } from "../validaciones";
 
-const TYPE_FILTERS = ['title', 'author', 'topic', 'location'];
+const TYPE_FILTERS = ["title", "author", "topic", "location"];
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const routeData = req.body;
 
   //get new unique name's file to QR
@@ -30,18 +30,18 @@ router.post('/', (req, res) => {
     createQR(JSON.stringify(routeData), (err, uri) => {
       if (err) {
         writeLog(err);
-        return res.status(500).json({ message: 'internal error' }).end();
+        return res.status(500).json({ message: "internal error" }).end();
       }
       // have buffer from uri's qr
       let dataUri = imageDataUri.decode(uri);
-      let rutaQR = path.join(__dirname, '../storage/qr', `${nameQr}.png`);
+      let rutaQR = path.join(__dirname, "../storage/qr", `${nameQr}.png`);
 
       fs.writeFile(rutaQR, dataUri.dataBuffer, (err) => {
         if (err) {
           writeLog(err);
           return res
             .status(500)
-            .json({ message: 'internal error qr file generate' })
+            .json({ message: "internal error qr file generate" })
             .end();
         }
         //parser json and insert into database
@@ -61,14 +61,14 @@ router.post('/', (req, res) => {
               deleteFile(rutaQR);
               console.log(err);
 
-              return res.status(500).json({ message: 'internal error' });
+              return res.status(500).json({ message: "internal error" });
             }
 
-            if ((result.response = 'true')) {
-              return res.status(200).json({ message: 'Ok', key: nameQr }).end();
+            if ((result.response = "true")) {
+              return res.status(200).json({ message: "Ok", key: nameQr }).end();
             } else {
               deleteFile(rutaQR);
-              return res.status(500).json({ message: 'internal error' }).end();
+              return res.status(500).json({ message: "internal error" }).end();
             }
           }
         );
@@ -77,11 +77,11 @@ router.post('/', (req, res) => {
   }
 });
 
-router.get('/:location', (req, res, next) => {
+router.get("/:location", (req, res, next) => {
   let location = req.params.location;
   if (!location) {
     return res.status(400).json({
-      message: 'error with arguments',
+      message: "error with arguments",
     });
   }
 
@@ -91,7 +91,7 @@ router.get('/:location', (req, res, next) => {
       if (err) {
         writeLog(err);
         return res.status(500).json({
-          message: 'internal error',
+          message: "internal error",
         });
       }
 
@@ -107,24 +107,24 @@ router.get('/:location', (req, res, next) => {
   });
 });
 
-router.get('/:filterType/:filterValue', (req, res, next) => {
+router.get("/:filterType/:filterValue", (req, res, next) => {
   let filterType = req.params.filterType.toLowerCase();
   // validate filterType is permited
   if (!TYPE_FILTERS.includes(filterType)) {
     return res.status(400).json({
-      message: 'Bad with request',
+      message: "Bad with request",
     });
   }
   let filterValue = req.params.filterValue.toLowerCase();
 
   ExplorerDB.getRoutesBy({
-    filterType: filterType.toLowerCase() == 'location' ? 'loca' : filterType,
+    filterType: filterType.toLowerCase() == "location" ? "loca" : filterType,
     filterValue,
     callback(err, result) {
       if (err) {
         writeLog(err);
         return res.status(500).json({
-          message: 'internal error',
+          message: "internal error",
         });
       }
       if (result.length == 0) {

@@ -1,10 +1,10 @@
-import express from 'express';
-import config from './config';
-import router from './router';
+import express from "express";
+import config from "./config";
+import router from "./router";
 //DB
-import ExplorerDB from './explorerDB/querys';
+import ExplorerDB from "./explorerDB/querys";
 //
-import { writeQRTermial } from './utilities';
+import { writeQRTermial } from "./utilities";
 
 let _server;
 
@@ -18,12 +18,14 @@ const server = {
     router(app);
     //server
     _server = app.listen(process.env.PORT, () => {
-      if (process.env.NODE_ENV !== 'test') {
+      if (process.env.NODE_ENV !== "test") {
         // start
-        console.log('\x1b[31m', '\n\nLocal address', '\x1b[0m');
+        console.log("\x1b[31m", "\n\nLocal address", "\x1b[0m");
         writeQRTermial(`http://${process.env.IP}:${process.env.PORT}`);
-        console.log(`Server open at http://${process.env.HOST}:${process.env.PORT}`);
-        console.log('Workspace: ', __dirname);
+        console.log(
+          `Server open at http://${process.env.HOST}:${process.env.PORT}`
+        );
+        console.log("Workspace: ", __dirname);
       }
     });
   },

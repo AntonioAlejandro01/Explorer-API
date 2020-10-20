@@ -1,0 +1,43 @@
+version: "3"
+services:
+  explorer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: explorer-server
+    environment:
+      DBHOST: "172.0.0.2"
+      DBUSER: "explorer"
+      DBPASSWD: "explorer"
+      DBdb: "Explorer"
+      PORT: 4500
+    depends_on:
+      - mysql
+    expose:
+      - 4500
+    ports:
+      - "4500:4500"
+    networks: 
+        explorer:
+            ipv4_address: 172.0.0.3
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: explorer
+      MYSQL_DATABASE: Explorer
+      MYSQL_USER: explorer
+      MYSQL_PASSWORD: explorer
+    volumes: 
+        - /explorer/data:/var/lib/mysql
+    networks: 
+        explorer:
+            ipv4_address: 172.0.0.2
+networks:
+    explorer:
+        driver: bridge
+        ipam:
+             config:
+                - subnet: 172.0.0.0/24
+
