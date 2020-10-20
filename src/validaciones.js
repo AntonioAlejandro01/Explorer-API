@@ -1,17 +1,17 @@
-import AdmZip from 'adm-zip';
+import AdmZip from "adm-zip";
 
 const OBJECT_KEYS_JSON = [
-  'title',
-  'author',
-  'location',
-  'topic',
-  'places',
-  'nombres',
-  'latitudes',
-  'longitudes',
-  'comments',
+  "title",
+  "author",
+  "location",
+  "topic",
+  "places",
+  "nombres",
+  "latitudes",
+  "longitudes",
+  "comments",
 ];
-const FILE_EXTENSIONS = ['png', 'jpg', 'jpeg'];
+const FILE_EXTENSIONS = ["png", "jpg", "jpeg"];
 
 export default function validateFormatRoute(route) {
   let jRoute = route;
@@ -58,7 +58,7 @@ export function validateZip(source) {
   // check if files have correct extension
   if (
     zipEntries
-      .map((item) => FILE_EXTENSIONS.includes(item.name.split('.')[1]))
+      .map((item) => FILE_EXTENSIONS.includes(item.name.split(".")[1]))
       .includes(false)
   ) {
     return undefined;

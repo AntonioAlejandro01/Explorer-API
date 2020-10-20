@@ -1,18 +1,18 @@
-import Express from 'express';
-import ExplorerDB from '../explorerDB/querys';
-import { writeLog } from '../utilities';
+import Express from "express";
+import ExplorerDB from "../explorerDB/querys";
+import { writeLog } from "../utilities";
 
 const router = Express.Router();
 
 /**
  * Devuelve al cliente todos los temas disponibles
  */
-router.get('/', (req, res, next) => {
+router.get("/", (req, res, next) => {
   ExplorerDB.getTopics({
     callback(err, result) {
       if (err) {
         writeLog(err);
-        return res.status(500).json({ message: 'Internal Error' });
+        return res.status(500).json({ message: "Internal Error" });
       }
       let topics = result.map(({ topicName }) => topicName);
       if (topics.length == 0) {

@@ -1,17 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Explorer API Documentation
-    </title>
-</head>
-<body style="text-align: center;">
-
-    <h1>API EXPLORER</h1>
-    <a href="endpoint.html"><button>Endpoints</button></a><br><br>
-    <a href="https://github.com/AntonioAlejandro01/NodeServer">GITHUB REPOSITORY</a>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <title>Explorer API Documentation</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #63af31;
+        color: whitesmoke;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url(./logoExplorer.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% 40%;
+      }
+      h1 {
+        justify-self: stretch;
+        font-size: xx-large;
+        display: flex;
+        justify-content: center;
+      }
+      .back {
+        background-color: #444444a2;
+        padding: 1em;
+        border-radius: 1em;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      thead > tr {
+        border-bottom: 4px solid grey;
+        margin-bottom: 1em;
+        text-transform: uppercase;
+      }
+      tbody > tr {
+        border-bottom: 2px solid grey;
+      }
+      td {
+        text-align: center;
+        padding: 1em 0.5em 0em 0.5em;
+      }
+      a {
+          font-weight: xx-large;
+          color: whitesmoke;
+          margin-top:2em;
+          justify-self: flex-end;
+          text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><span class="back">API EXPLORER</span></h1>
+    <div class="back">
+      <table>
+        <thead>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GET</td>
+            <td>/topics</td>
+            <td>Get a list of topics</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/images/QR/:key</td>
+            <td>Get a QR image that it contain the list</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/routes/:location</td>
+            <td>
+              Get a list of routes that his location is equal than the location
+              passed as paramter in path
+            </td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/routes/:filterType/:filterValue</td>
+            <td>
+              Get a list of routes filter by filter and value passed as
+              parameter in path
+            </td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td>/routes</td>
+            <td>Create a route</td>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>/data/:key</td>
+            <td>
+              Get a creation date and stars that it have it(Starts are equal
+              downloads)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <a class="back" href="https://github.com/AntonioAlejandro01/NodeServer"
+      >GITHUB REPOSITORY</a
+    >
+  </body>
 </html>
