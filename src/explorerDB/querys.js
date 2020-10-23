@@ -13,8 +13,8 @@ const ExplorerDB = {
 
     let query =
       filterType == "topic"
-        ? "SELECT qrKey FROM Explorer.Route WHERE topic in (SELECT id from Explorer.Topic where topicName = ?)"
-        : `SELECT qrKey FROM Explorer.Route WHERE ${filterType} = ?`;
+        ? "SELECT title,qrKey FROM Explorer.Route WHERE topic in (SELECT id from Explorer.Topic where topicName = ?)"
+        : `SELECT title, qrKey FROM Explorer.Route WHERE ${filterType} = ?`;
 
     explorerDB.query(query, [filterValue], callback);
   },
@@ -22,7 +22,7 @@ const ExplorerDB = {
     // llamada a la api en el endpoint GET /route
     throwError(callback);
     explorerDB.query(
-      "SELECT qrKey FROM Explorer.Route where loca = ?",
+      "SELECT title,qrKey FROM Explorer.Route where loca = ?",
       [location],
       callback
     );
@@ -31,7 +31,7 @@ const ExplorerDB = {
     throwError(callback);
 
     explorerDB.query(
-      "SELECT stars, creationDate  FROM Explorer.Route INNER JOIN on Explorer.Route.id = Explorer.CreationsLog.idRoute WHERE Explorer.Route.qrkey = ?",
+      "SELECT stars, creationDate  FROM Explorer.Route INNER JOIN Explorer.CreationsLog on Explorer.Route.id = Explorer.CreationsLog.idRoute WHERE Explorer.Route.qrkey = ?",
       [qrKey],
       callback
     );

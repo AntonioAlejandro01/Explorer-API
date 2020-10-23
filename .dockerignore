@@ -1,0 +1,7 @@
+node_modules/
+LICENSE
+README.md
+.gitignore
+exRuta.json
+exMetadataRuta.json
+docker-compose.yml

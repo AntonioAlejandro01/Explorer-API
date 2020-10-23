@@ -1,5 +1,7 @@
 import express from "express";
 import fs from "fs";
+import path from "path";
+
 //
 import { writeLog } from "../utilities.js";
 
@@ -10,7 +12,7 @@ router.get("/QR/:key", (req, res) => {
   if (!key) {
     return res.status(400).json({ message: "Bad request" }).end();
   }
-  fs.readdir("src/storage/qr", (err, files) => {
+  fs.readdir(path.join(__dirname, "../storage/qr"), (err, files) => {
     res.setHeader("Content-Type", "application/json");
     if (err) {
       writeLog(err);
@@ -23,7 +25,7 @@ router.get("/QR/:key", (req, res) => {
       if (files[i].substring(0, files[i].lastIndexOf(".")) == key) {
         // key match with one qr
         res.setHeader("Content-Type", `image/${extension}`);
-        let fd = fs.createReadStream(`src/storage/qr/${files[i]}`);
+        let fd = fs.createReadStream(`${path.join(__dirname, "../storage/qr")}/${files[i]}`);
         return fd.pipe(res);
       }
     }

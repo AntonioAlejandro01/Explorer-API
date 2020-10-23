@@ -2,11 +2,26 @@ FROM node:latest as builder
 
 WORKDIR /opt/server
 
-COPY ./src .
-COPY ./package.json .
-COPY ./package-lock.json .
+COPY . .
 
-RUN npm install --only=production
+RUN npm install
+RUN npm run build
+RUN ls .
 
-CMD [ "node", 'src/index.js' ]
+FROM node:latest
+
+WORKDIR /opt/server
+
+COPY --from=builder /opt/server/dist /opt/server/
+COPY --from=builder /opt/server/package.json /opt/server/
+COPY --from=builder /opt/server/package-lock.json /opt/server/
+COPY --from=builder /opt/server/.env /opt/server/
+COPY --from=builder /opt/server/run.sh /opt/server/
+COPY --from=builder /opt/server/src/public /opt/server/public
+RUN npm install --production=only
+
+RUN mkdir -p ./storage/qr
+
+RUN ls .
+CMD ["bash","./run.sh"]
 

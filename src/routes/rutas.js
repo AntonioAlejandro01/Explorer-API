@@ -101,7 +101,7 @@ router.get("/:location", (req, res, next) => {
           message: "it wasn't found results",
         });
       }
-      ExplorerDB.registerDownload(result.map(({ qrKey }) => qrKey));
+      ExplorerDB.registerDownload(result.map(({ qrKey, title }) => qrKey));
       return res.status(200).json(result).end();
     },
   });
@@ -132,7 +132,7 @@ router.get("/:filterType/:filterValue", (req, res, next) => {
           message: "it wasn't found results",
         });
       }
-      ExplorerDB.registerDownload(result.map(({ qrKey }) => qrKey));
+      ExplorerDB.registerDownload(result.map(({ qrKey,title }) => qrKey));
       return res.status(200).json(result).end();
     },
   });
