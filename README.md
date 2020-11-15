@@ -8,9 +8,9 @@
 + DBdb
 + PORT
 
-Proyects Repositories
+Proyect repositories
 
-- [Database Scripts](https://github.com/AntonioAlejandro01/ExplorerDB)
+- [Database Scrips](https://github.com/AntonioAlejandro01/Explorer-DBScripts)
 - [Node.js API](https://github.com/AntonioAlejandro01/Explorer-API)
-- [Angular Web Page](https://github.com/AntonioAlejandro01/explorer-web)
-- [Android APP](https://github.com/AntonioAlejandro01/ExpplorerApp)
+- [Angular Web page](https://github.com/AntonioAlejandro01/explorer-web)
+- [Android APP](https://github.com/AntonioAlejandro01/Explorer-Android-APP)
