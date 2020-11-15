@@ -6,7 +6,6 @@ COPY . .
 
 RUN npm install
 RUN npm run build
-RUN ls .
 
 FROM node:latest
 
@@ -22,6 +21,5 @@ RUN npm install --production=only
 
 RUN mkdir -p ./storage/qr
 
-RUN ls .
 CMD ["bash","./run.sh"]
 
